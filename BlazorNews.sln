@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorNews_Server", "BlazorNews_Server\BlazorNews_Server.csproj", "{43B21605-5104-4A40-A0DF-AAC898B16201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorNews_Server", "BlazorNews_Server\BlazorNews_Server.csproj", "{43B21605-5104-4A40-A0DF-AAC898B16201}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Commmon", "Blazor.Commmon\Blazor.Commmon.csproj", "{FF63FA76-5A6F-4E2E-B648-B2765879ABEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Commmon", "Blazor.Commmon\Blazor.Commmon.csproj", "{FF63FA76-5A6F-4E2E-B648-B2765879ABEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Business", "Blazor.Business\Blazor.Business.csproj", "{AD95B597-6410-4DB0-96D9-1CC2F87E48DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Business", "Blazor.Business\Blazor.Business.csproj", "{AD95B597-6410-4DB0-96D9-1CC2F87E48DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Data", "Blazor.Data\Blazor.Data.csproj", "{5B8140DA-337E-40ED-875C-1A5C8C6ADDFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Data", "Blazor.Data\Blazor.Data.csproj", "{5B8140DA-337E-40ED-875C-1A5C8C6ADDFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Domain", "Blazor.Domain\Blazor.Domain.csproj", "{A74A7B5F-9B66-4189-AB8A-1D5B8F19B822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Model", "Blazor.Domain\Blazor.Model.csproj", "{A74A7B5F-9B66-4189-AB8A-1D5B8F19B822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.25" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25">
@@ -19,7 +20,7 @@
 		<ProjectReference Include="..\Blazor.Business\Blazor.Business.csproj" />
 		<ProjectReference Include="..\Blazor.Commmon\Blazor.Commmon.csproj" />
 		<ProjectReference Include="..\Blazor.Data\Blazor.Data.csproj" />
-		<ProjectReference Include="..\Blazor.Domain\Blazor.Domain.csproj" />
+		<ProjectReference Include="..\Blazor.Domain\Blazor.Model.csproj" />
 	</ItemGroup>
 
 </Project>
