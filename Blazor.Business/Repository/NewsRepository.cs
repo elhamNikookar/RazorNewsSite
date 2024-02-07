@@ -3,9 +3,11 @@ using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
 using Blazor.Data.Entities.NewsEntities;
 using Blazor.Model.DTOs.Newses;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,41 +28,88 @@ namespace Blazor.Business.Repository
         public async Task<NewsDTO> CreateNews(NewsDTO newsDTO)
         {
             var news = _mapper.Map<NewsDTO, News>(newsDTO);
-            news.CreatedBy = "";
+            news.CreatedBy = "no body";
+            news.EditedBy = "no body";
             news.CreateDate = DateTime.Now;
             await _context.Newes.AddAsync(news);
             await _context.SaveChangesAsync();
             return _mapper.Map<News, NewsDTO>(news);
         }
 
-        public Task<IEnumerable<NewsDTO>> GetAllNewses()
+        public async Task<IEnumerable<NewsDTO>> GetAllNewses()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IEnumerable<NewsDTO> newsDTOs = _mapper.Map<IEnumerable<News>, IEnumerable<NewsDTO>>(await _context.Newes.ToListAsync());
+                return newsDTOs;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public Task<NewsDTO> GetNewsById(int newsId)
+        public async Task<NewsDTO> GetNewsById(int newsId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _mapper.Map<News, NewsDTO>(await _context.Newes.FindAsync(newsId));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public Task<NewsDTO> IsNewsExistsByTitle(string title)
+        public async Task<NewsDTO> IsNewsExistsByTitle(string title)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _mapper.Map<News, NewsDTO>(await _context.Newes.SingleOrDefaultAsync(n => n.Title == title));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public Task<NewsDTO> RemoveNews(int newsId)
+        public async Task<int> RemoveNews(int newsId)
         {
-            throw new NotImplementedException();
+            var news = await _context.Newes.FindAsync(newsId);
+            if (news != null)
+            {
+                _context.Newes.Remove(news);
+                await _context.SaveChangesAsync();
+                return news.NewsId;
+            }
+            return 0;
         }
 
-        public Task<NewsDTO> RemoveNews(NewsDTO newsDTO)
+        public async Task<int> RemoveNews(NewsDTO newsDTO)
         {
-            throw new NotImplementedException();
+            return await RemoveNews(newsDTO.NewsId);
         }
 
-        public Task<NewsDTO> UpdateNews(int newsId, NewsDTO newsDTO)
+        public async Task<NewsDTO> UpdateNews(int newsId, NewsDTO newsDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                News currenNews = await _context.Newes.FindAsync(newsId);
+
+                if (currenNews == null) return null;
+                if (currenNews.NewsId != newsDTO.NewsId) return null;
+
+                News upadateNews = _mapper.Map<NewsDTO, News>(newsDTO, currenNews);
+                upadateNews.EditedBy = "";
+
+                _context.Newes.Update(upadateNews);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<News, NewsDTO>(upadateNews);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

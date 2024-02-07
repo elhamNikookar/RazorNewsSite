@@ -1,0 +1,56 @@
+﻿@page "/newses/add-news"
+@using Blazor.Business.Repository.IRepository;
+@using Blazor.Model.DTOs.Newses
+@inject INewsRepository NewsRepository
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="post_content">
+                <EditForm Model="@NewsModel" OnValidSubmit="HandleCreateNews">
+                    <DataAnnotationsValidator />
+                    @* <ValidationSummary /> *@
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>عنوان : </label>
+                            <InputText class="form-control" @bind-Value="@NewsModel.Title" placeholder="عنوان خبر" />
+                        </div>
+                        <ValidationMessage For="()=>NewsModel.Title" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>توضیحات کوتاه : </label>
+                            <InputTextArea class="form-control" @bind-Value="@NewsModel.ShortDescription" placeholder="توضیحات کوتاه" />
+                        </div>
+                        <ValidationMessage For="()=>NewsModel.ShortDescription" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>توضیحات : </label>
+                            <InputTextArea class="form-control" @bind-Value="@NewsModel.Description" placeholder="توضیحات" />
+                        </div>
+                        <ValidationMessage For="()=>NewsModel.Description" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">ثبت خبر</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private NewsDTO NewsModel { get; set; } = new NewsDTO();
+
+    private async Task HandleCreateNews()
+    {
+        if (await NewsRepository.IsNewsExistsByTitle(NewsModel.Title) != null) return;
+
+        var createResult = await NewsRepository.CreateNews(NewsModel);
+        NavigationManager.NavigateTo("/newses");
+    }
+}

@@ -1,3 +1,5 @@
+using Blazor.Business.Repository;
+using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
 using BlazorNews_Server.Data;
 using Microsoft.AspNetCore.Components;
@@ -9,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
 
 #region Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

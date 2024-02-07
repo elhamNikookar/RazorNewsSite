@@ -4,20 +4,20 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BlazorVilla_Server</title>
+    <title>BlazorNews_Server</title>
     <base href="~/" />
     <link rel="stylesheet" href="/site/css/bootstrap.css">
     <link rel="stylesheet" href="/site/css/font-awesome.min.css">
     <link rel="stylesheet" href="/site/css/owl.carousel.css">
     <link rel="stylesheet" href="/site/css/owl.theme.default.css">
     <link rel="stylesheet" href="/site/css/style.css">
-    <link href="BlazorVilla_Server.styles.css" rel="stylesheet" />
+    <link href="BlazorNews_Server.styles.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
     <component type="typeof(App)" render-mode="ServerPrerendered" />
@@ -38,5 +38,8 @@
     <script src="/site/js/owl.carousel.min.js"></script>
     <script src="/site/js/index.js"></script>
     <script src="_framework/blazor.server.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/site/js/custom.js"></script>
 </body>
 </html>

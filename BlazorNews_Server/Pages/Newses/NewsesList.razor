@@ -1,0 +1,103 @@
+﻿@page "/newses"
+@using Blazor.Business.Repository.IRepository
+@using Blazor.Model.DTOs.Newses
+@using BlazorNews_Server.Helpers;
+@inject INewsRepository NewsRepository
+@inject IJSRuntime JsRuntime
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <NavLink href="newses/add-news" class="btn btn-info form-control">
+                ثبت خبر جدید
+            </NavLink>
+            <div class="post_content">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>عنوان</td>
+                            <td>تاریخ ثبت</td>
+                            <td>توضیحات کوتاه</td>
+                            <td>دستورات</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Newses.Any())
+                        {
+                            foreach (var news in Newses)
+                            {
+                                <tr>
+                                    <td>
+                                        @news.Title
+                                    </td>
+                                    <td>
+                                        @news.CreateDate
+                                    </td>
+                                    <td>
+                                        @news.ShortDescription
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning btn-block" @onclick="TestConfirmBox">ویرایش</a>
+                                        <a class="btn btn-success btn-block" @onclick="TestSuccess">موفقیت</a>
+                                        <a class="btn btn-danger btn-block" @onclick="TestError">خطا</a>
+                                        <a class="btn btn-success btn-block" @onclick="SwlSuccess">موفقیت</a>
+                                        <a class="btn btn-danger btn-block" @onclick="SwlError">خطا</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">هیچ خبری یافت نشد</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <p>IsConfirm : @IsConfirm</p>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private IEnumerable<NewsDTO> Newses { get; set; } = new List<NewsDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Newses = await NewsRepository.GetAllNewses();
+    }
+
+    private string ConfirmMessage = "Test Confirm Message.";
+    private bool IsConfirm { get; set; }
+
+    private async Task TestConfirmBox()
+    {
+        IsConfirm = await JsRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
+    }
+
+    private async Task TestSuccess()
+    {
+        await JsRuntime.InvokeVoidAsync("ShowToastr", "success", "عملیات موفقیت آمیز");
+    }
+
+    private async Task TestError()
+    {
+        //use extention method for javascript.
+        await JsRuntime.ToastrError("عملیات ناموفق");
+    }
+
+    private async Task SwlSuccess()
+    {
+        await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "عملیات با موفقیت انجام شد.");
+    }
+
+    private async Task SwlError()
+    {
+        await JsRuntime.InvokeVoidAsync("ShowSwal", "error", "عملیات با شکست مواجه شد.");
+    }
+}

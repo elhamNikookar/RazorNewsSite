@@ -23,10 +23,10 @@ namespace Blazor.Model.DTOs.Newses
 
         [Display(Name = "نام تصویر")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
-        [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
-        public string ImageName { get; set; }
+        //[Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
+        public string? ImageName { get; set; } = "Defualt.jpg";
 
         [Display(Name = "تاریخ ثبت")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
     }
 }
