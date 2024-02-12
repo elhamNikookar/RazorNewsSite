@@ -2,6 +2,8 @@ using Blazor.Business.Repository;
 using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
 using BlazorNews_Server.Data;
+using BlazorNews_Server.Service.Implementation;
+using BlazorNews_Server.Service.IService;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 #region Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

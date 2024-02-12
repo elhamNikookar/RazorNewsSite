@@ -2,8 +2,13 @@
 @using Blazor.Business.Repository.IRepository
 @using Blazor.Model.DTOs.Newses
 @using BlazorNews_Server.Helpers;
+@using BlazorNews_Server.Service.IService;
+
 @inject INewsRepository NewsRepository
 @inject IJSRuntime JsRuntime
+@inject IFileUploadService FileUploadService
+
+
 
 <div class="container">
     <div class="row">
@@ -37,11 +42,8 @@
                                         @news.ShortDescription
                                     </td>
                                     <td>
-                                        <a class="btn btn-warning btn-block" @onclick="TestConfirmBox">ویرایش</a>
-                                        <a class="btn btn-success btn-block" @onclick="TestSuccess">موفقیت</a>
-                                        <a class="btn btn-danger btn-block" @onclick="TestError">خطا</a>
-                                        <a class="btn btn-success btn-block" @onclick="SwlSuccess">موفقیت</a>
-                                        <a class="btn btn-danger btn-block" @onclick="SwlError">خطا</a>
+                                        <NavLink href="@($"/newses/edit-news/{news.NewsId}")" class="btn btn-warning btn-block">ویرایش</NavLink>
+                                   <button class="btn btn-danger" @onclick="()=>HandleDelete(news.NewsId)">حذف خبر</button>
                                     </td>
                                 </tr>
                             }
@@ -56,9 +58,11 @@
                 </table>
             </div>
         </div>
-        <div class="col-md-12">
-            <p>IsConfirm : @IsConfirm</p>
-        </div>
+        @* <div class="col-md-12">
+        <p>
+        IsConfirm : @IsConfirm
+        </p>
+        </div> *@
     </div>
 </div>
 
@@ -66,38 +70,58 @@
 
 @code {
     private IEnumerable<NewsDTO> Newses { get; set; } = new List<NewsDTO>();
+    private string ConfirmMessage = "test confirm message";
+    private bool IsConfirm { get; set; }
+    private int DeleteNewsId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Newses = await NewsRepository.GetAllNewses();
     }
 
-    private string ConfirmMessage = "Test Confirm Message.";
-    private bool IsConfirm { get; set; }
 
-    private async Task TestConfirmBox()
+    public async Task HandleDelete(int newsId)
     {
+        DeleteNewsId = newsId;
+        await JsRuntime.InvokeVoidAsync("showConfirmationModal");
+    }
+
+    public async Task ConfirmDelete_Click(bool isConfirm)
+    {
+        if (isConfirm && DeleteNewsId != null)
+        {
+            var news = await NewsRepository.GetNewsById(DeleteNewsId);
+            await NewsRepository.RemoveNews(news);
+            FileUploadService.DeleteFile(news.ImageName);
+            await JsRuntime.ToastrSuccess("خبر با موفقیت حذف شد.");
+            Newses = await NewsRepository.GetAllNewses();
+        }
+        await JsRuntime.InvokeVoidAsync("hideConfirmationModal");
+    }
+
+    /*private async Task TestConfirmBox()
+        {
         IsConfirm = await JsRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
     }
 
     private async Task TestSuccess()
-    {
-        await JsRuntime.InvokeVoidAsync("ShowToastr", "success", "عملیات موفقیت آمیز");
+        {
+        await JsRuntime.ToastrSuccess("این یک پیغام موفقیت می باشد");
     }
 
     private async Task TestError()
-    {
-        //use extention method for javascript.
-        await JsRuntime.ToastrError("عملیات ناموفق");
+        {
+        await JsRuntime.ToastrError("این یک پیغام خطا می باشد");
     }
 
-    private async Task SwlSuccess()
-    {
-        await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "عملیات با موفقیت انجام شد.");
+    private async Task SwalSuccess()
+        {
+        await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "عملیات مورد نظر با موفقیت انجام شد");
     }
 
-    private async Task SwlError()
-    {
-        await JsRuntime.InvokeVoidAsync("ShowSwal", "error", "عملیات با شکست مواجه شد.");
-    }
+    private async Task SwalError()
+        {
+        await JsRuntime.InvokeVoidAsync("ShowSwal", "error", "عملیات مورد نظر با شکست مواجه شد");
+    }*/
+
 }

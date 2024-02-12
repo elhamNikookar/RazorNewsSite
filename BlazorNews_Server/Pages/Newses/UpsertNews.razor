@@ -1,0 +1,156 @@
+﻿@page "/newses/add-news"
+@page "/newses/edit-news/{Id:int}"
+
+@using Blazor.Model.DTOs.Newses
+@using Blazor.Business.Repository.IRepository
+@using Blazor.Data.Entities.NewsEntities
+@using BlazorNews_Server.Helpers
+@using BlazorNews_Server.Service.Implementation;
+@using BlazorNews_Server.Service.IService;
+
+@inject INewsRepository NewsRepository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@inject IFileUploadService FileUploadService
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="post_content">
+                <EditForm Model="@NewsModel" OnValidSubmit="HandleUpsertNews">
+                    <DataAnnotationsValidator />
+                    @*<ValidationSummary />*@
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>عنوان : </label>
+                            <InputText class="form-control" @bind-Value="@NewsModel.Title" placeholder="عنوان خبر" />
+                        </div>
+                        <ValidationMessage class="text-danger" style="color:red" For="() => NewsModel.Title" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>توضیحات کوتاه : </label>
+                            <InputTextArea class="form-control" @bind-Value="@NewsModel.ShortDescription" placeholder="توضیحات کوتاه" />
+                        </div>
+                        <ValidationMessage For="() => NewsModel.ShortDescription" style="color:red" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>توضیحات : </label>
+                            <InputTextArea class="form-control" @bind-Value="@NewsModel.Description" placeholder="توضیحات" />
+                        </div>
+                        <ValidationMessage For="() => NewsModel.Description" style="color:red" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>تصویر خبر : </label>
+                            <InputFile OnChange="HandleImageUpload" />
+                        </div>
+                        <ValidationMessage For="() => NewsModel.ImageName" style="color:red" />
+                        @if (!string.IsNullOrEmpty(NewsModel.ImageName))
+                        {
+                            <div class="row" style="margin:20px 0">
+                                <div class="col-md-3">
+                                    <img src="/images/@NewsModel.ImageName" />
+                                    <a class="btn btn-danger" @onclick="()=>DeleteImage()">
+                                        حذف تصویر
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">@Title خبر</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    public string Title { get; set; } = "افزودن";
+
+    private NewsDTO NewsModel { get; set; } = new NewsDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+        {
+            // update
+            Title = "ویرایش";
+            NewsModel = await NewsRepository.GetNewsById(Id.Value);
+        }
+        else
+        {
+            // create
+        }
+    }
+
+
+    private async Task DeleteImage()
+    {
+        try
+        {
+            var result = FileUploadService.DeleteFile(NewsModel.ImageName);
+            if (result) NewsModel.ImageName = "";
+        }
+        catch (Exception ex)
+        {
+            await JsRuntime.ToastrError(ex.Message);
+        }
+    }
+    private async Task HandleUpsertNews()
+    {
+        try
+        {
+            var duplicateNews = await NewsRepository.IsNewsExistsByTitle(NewsModel.Title, NewsModel.NewsId);
+            if (duplicateNews != null)
+            {
+                await JsRuntime.ToastrError("خبر مورد نظر تکراری است.");
+                return;
+            }
+            if (NewsModel.NewsId != 0)
+            {
+                await NewsRepository.UpdateNews(NewsModel.NewsId, NewsModel);
+                await JsRuntime.ToastrSuccess("خبر با موفقیت ویرابش شد.");
+            }
+            else
+            {
+                await NewsRepository.CreateNews(NewsModel);
+                await JsRuntime.ToastrSuccess("خبر با موفقیت ایجاد شد.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        NavigationManager.NavigateTo("newses");
+    }
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            FileInfo fileInfo = new FileInfo(e.File.Name);
+            if (fileInfo.Extension.ToLower() == ".jpg" ||
+               fileInfo.Extension.ToLower() == ".png" ||
+               fileInfo.Extension.ToLower() == ".jpeg")
+            {
+                NewsModel.ImageName = await FileUploadService.UploadFile(e.File);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}

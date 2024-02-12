@@ -61,11 +61,11 @@ namespace Blazor.Business.Repository
             }
         }
 
-        public async Task<NewsDTO> IsNewsExistsByTitle(string title)
+        public async Task<NewsDTO> IsNewsExistsByTitle(string title, int newsId)
         {
             try
             {
-                return _mapper.Map<News, NewsDTO>(await _context.Newes.SingleOrDefaultAsync(n => n.Title == title));
+                return _mapper.Map<News, NewsDTO>(await _context.Newes.SingleOrDefaultAsync(n => n.Title == title && n.NewsId != newsId));
             }
             catch (Exception ex)
             {
