@@ -43,7 +43,8 @@
                                     </td>
                                     <td>
                                         <NavLink href="@($"/newses/edit-news/{news.NewsId}")" class="btn btn-warning btn-block">ویرایش</NavLink>
-                                   <button class="btn btn-danger" @onclick="()=>HandleDelete(news.NewsId)">حذف خبر</button>
+                                        <br />
+                                        <button class="btn btn-danger btn-block" @onclick="()=>HandleDelete(news.NewsId)">حذف خبر</button>
                                     </td>
                                 </tr>
                             }
@@ -65,7 +66,7 @@
         </div> *@
     </div>
 </div>
-
+<DeleteConfirmation IsParentComponentProcessing="IsProcessing" confirmationonChanged="ConfirmDelete_Click"></DeleteConfirmation>
 
 
 @code {
@@ -73,6 +74,7 @@
     private string ConfirmMessage = "test confirm message";
     private bool IsConfirm { get; set; }
     private int DeleteNewsId { get; set; }
+    public bool IsProcessing { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,6 +90,7 @@
 
     public async Task ConfirmDelete_Click(bool isConfirm)
     {
+        IsProcessing = true;
         if (isConfirm && DeleteNewsId != null)
         {
             var news = await NewsRepository.GetNewsById(DeleteNewsId);
@@ -97,6 +100,7 @@
             Newses = await NewsRepository.GetAllNewses();
         }
         await JsRuntime.InvokeVoidAsync("hideConfirmationModal");
+        IsProcessing = false;
     }
 
     /*private async Task TestConfirmBox()

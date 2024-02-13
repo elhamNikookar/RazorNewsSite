@@ -38,7 +38,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>توضیحات : </label>
-                            <InputTextArea class="form-control" @bind-Value="@NewsModel.Description" placeholder="توضیحات" />
+                            @* <InputTextArea class="form-control" @bind-Value="@NewsModel.Description" placeholder="توضیحات" /> *@
+                       <CKEditorBlazor Id="MyEditor" @bind-Value=@NewsModel.Description></CKEditorBlazor>
                         </div>
                         <ValidationMessage For="() => NewsModel.Description" style="color:red" />
                     </div>
