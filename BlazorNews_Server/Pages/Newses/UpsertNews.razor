@@ -4,9 +4,9 @@
 @using Blazor.Model.DTOs.Newses
 @using Blazor.Business.Repository.IRepository
 @using Blazor.Data.Entities.NewsEntities
+@using System.IO
+@using BlazorNews_Server.Service.IService
 @using BlazorNews_Server.Helpers
-@using BlazorNews_Server.Service.Implementation;
-@using BlazorNews_Server.Service.IService;
 
 @inject INewsRepository NewsRepository
 @inject NavigationManager NavigationManager
@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label>توضیحات : </label>
                             @* <InputTextArea class="form-control" @bind-Value="@NewsModel.Description" placeholder="توضیحات" /> *@
-                       <CKEditorBlazor Id="MyEditor" @bind-Value=@NewsModel.Description></CKEditorBlazor>
+                            <CKEditorBlazor Id="MyEditor" @bind-Value=@NewsModel.Description> </CKEditorBlazor>
                         </div>
                         <ValidationMessage For="() => NewsModel.Description" style="color:red" />
                     </div>
@@ -48,13 +48,12 @@
                             <label>تصویر خبر : </label>
                             <InputFile OnChange="HandleImageUpload" />
                         </div>
-                        <ValidationMessage For="() => NewsModel.ImageName" style="color:red" />
                         @if (!string.IsNullOrEmpty(NewsModel.ImageName))
                         {
-                            <div class="row" style="margin:20px 0">
+                            <div class="row" style="margin: 20px 0">
                                 <div class="col-md-3">
                                     <img src="/images/@NewsModel.ImageName" />
-                                    <a class="btn btn-danger" @onclick="()=>DeleteImage()">
+                                    <a class="btn btn-danger" @onclick="() => DeleteImage()">
                                         حذف تصویر
                                     </a>
                                 </div>
@@ -81,8 +80,19 @@
 
     private NewsDTO NewsModel { get; set; } = new NewsDTO();
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        var authenticationState = await AuthenticationState;
+        if (!authenticationState.User.Identity.IsAuthenticated)
+        {
+            var uri = new Uri(NavigationManager.Uri);
+            NavigationManager.NavigateTo($"/identity/account/login?returnUrl={uri.LocalPath}");
+        }
+
+
         if (Id != null)
         {
             // update
@@ -95,19 +105,23 @@
         }
     }
 
-
     private async Task DeleteImage()
     {
         try
         {
             var result = FileUploadService.DeleteFile(NewsModel.ImageName);
-            if (result) NewsModel.ImageName = "";
+            if (result)
+            {
+                NewsModel.ImageName = "";
+            }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            await JsRuntime.ToastrError(ex.Message);
+            await JsRuntime.ToastrError(e.Message);
         }
     }
+
+
     private async Task HandleUpsertNews()
     {
         try
@@ -115,23 +129,25 @@
             var duplicateNews = await NewsRepository.IsNewsExistsByTitle(NewsModel.Title, NewsModel.NewsId);
             if (duplicateNews != null)
             {
-                await JsRuntime.ToastrError("خبر مورد نظر تکراری است.");
+                await JsRuntime.ToastrError("خبر مورد نظر تکراری می باشد");
                 return;
             }
+
             if (NewsModel.NewsId != 0)
             {
-                await NewsRepository.UpdateNews(NewsModel.NewsId, NewsModel);
-                await JsRuntime.ToastrSuccess("خبر با موفقیت ویرابش شد.");
+                var editResult = await NewsRepository.UpdateNews(NewsModel.NewsId, NewsModel);
+                await JsRuntime.ToastrSuccess("خبر مورد نظر با موفقیت ویرایش شد");
             }
             else
             {
-                await NewsRepository.CreateNews(NewsModel);
-                await JsRuntime.ToastrSuccess("خبر با موفقیت ایجاد شد.");
+                var createResult = await NewsRepository.CreateNews(NewsModel);
+                await JsRuntime.ToastrSuccess("خبر مورد نظر با موفقیت ثبت شد");
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine(ex);
+            Console.WriteLine(e);
+            throw;
         }
 
         NavigationManager.NavigateTo("newses");
@@ -143,8 +159,8 @@
         {
             FileInfo fileInfo = new FileInfo(e.File.Name);
             if (fileInfo.Extension.ToLower() == ".jpg" ||
-               fileInfo.Extension.ToLower() == ".png" ||
-               fileInfo.Extension.ToLower() == ".jpeg")
+                fileInfo.Extension.ToLower() == ".png" ||
+                fileInfo.Extension.ToLower() == ".jpeg")
             {
                 NewsModel.ImageName = await FileUploadService.UploadFile(e.File);
             }
@@ -152,6 +168,7 @@
         catch (Exception ex)
         {
             Console.WriteLine(ex);
+            throw;
         }
     }
 }

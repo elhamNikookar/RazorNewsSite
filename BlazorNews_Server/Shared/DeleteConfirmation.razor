@@ -9,16 +9,17 @@
                 آیا از حذف اطلاعات مورد نظر اطمینان دارید؟
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">کنسل کردن</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" @onclick="()=>OnConfirmationChanged(false)">کنسل کردن</button>
+
                 @if (IsProcessStart)
                 {
                     <button class="btn btn-danger">
-                        <i class="fa fa-spin fa-spinner"></i>در حال انجام عملیات
+                        <i class="fa fa-spin fa-spinner"></i> در حال انجام عملیات
                     </button>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-danger" @onclick="()=>OnconfirmationonChanged(true)">حذف</button>
+                    <button type="button" class="btn btn-danger" @onclick="()=>OnConfirmationChanged(true)">حذف</button>
                 }
             </div>
         </div>
@@ -26,22 +27,27 @@
 </div>
 
 @code {
+
     public bool IsProcessStart { get; set; }
 
     [Parameter]
     public bool IsParentComponentProcessing { get; set; }
 
     [Parameter]
-    public EventCallback<bool> confirmationonChanged { get; set; }
+    public EventCallback<bool> ConfirmationChanged { get; set; }
 
     protected override void OnParametersSet()
     {
         IsProcessStart = IsParentComponentProcessing;
     }
-    protected async Task OnconfirmationonChanged(bool value)
-    {
-        if (value) IsProcessStart = true;
 
-        await confirmationonChanged.InvokeAsync(value);
+    protected async Task OnConfirmationChanged(bool value)
+    {
+        if (value)
+        {
+            IsProcessStart = true;
+        }
+
+        await ConfirmationChanged.InvokeAsync(value);
     }
 }

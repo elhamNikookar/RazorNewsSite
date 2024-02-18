@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BlazorNews_Server.Service.IService
 {

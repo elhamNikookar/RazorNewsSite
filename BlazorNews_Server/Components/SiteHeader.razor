@@ -1,5 +1,4 @@
-﻿
-<div class="top-bar">
+﻿<div class="top-bar">
     <div class="container-fluid">
         <div class="col-md-6">
             <div class="search-btn">
@@ -48,6 +47,32 @@
                     <li><a href="#">اقتصادی</a></li>
                     <li><a href="#">انجمن</a></li>
                     <li><a href="#">گروه رسانه ای</a></li>
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <li>
+                                سلام ، @context.User.Identity.Name
+                            </li>
+                            <li>
+                                <NavLink href="Identity/Account/Logout">
+                                    خروج
+                                </NavLink>
+                            </li>
+                        </Authorized>
+                        <NotAuthorized>
+                            <li>
+                                <NavLink href="Identity/Account/Register">
+                                    ثبت نام
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="Identity/Account/Login">
+                                    ورود
+                                </NavLink>
+                            </li>
+                        </NotAuthorized>
+                    </AuthorizeView>
+
                 </ul>
             </div>
         </div>
@@ -63,4 +88,3 @@
     </div>
 </div>
 <div class="clear-fix"></div>
-

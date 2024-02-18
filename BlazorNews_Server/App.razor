@@ -1,10 +1,23 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>صفحه ای با مشخصات وارد شده یافت نشد</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <div class="container">
+                        <div class="row">
+                            <div class="alert alert-warnning">
+                                <p>شما به این صفحه دسترسی ندارید!</p>
+                            </div>
+                        </div>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>صفحه ای با مشخصات وارد شده یافت نشد</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

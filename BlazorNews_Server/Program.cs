@@ -1,11 +1,9 @@
 using Blazor.Business.Repository;
 using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
-using BlazorNews_Server.Data;
 using BlazorNews_Server.Service.Implementation;
 using BlazorNews_Server.Service.IService;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddScoped<INewsRepository, NewsRepository>();
-builder.Services.AddScoped<IFileUploadService, FileUploadService>();
-
 #region Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -24,11 +19,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 #endregion
 
+
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
+
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
+
 //Add automapper configuration
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -45,6 +52,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapRazorPages();
 app.MapBlazorHub();

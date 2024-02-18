@@ -1,49 +1,59 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
 using Blazor.Data.Entities.NewsEntities;
 using Blazor.Model.DTOs.Newses;
+using Blazor.Model.DTOs.Paging;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blazor.Business.Repository
 {
     public class NewsRepository : INewsRepository
     {
-        #region Constructor
+        #region constructor
+
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+
         public NewsRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
+
         #endregion
+
 
         public async Task<NewsDTO> CreateNews(NewsDTO newsDTO)
         {
             var news = _mapper.Map<NewsDTO, News>(newsDTO);
-            news.CreatedBy = "no body";
-            news.EditedBy = "no body";
+            news.CreatedBy = "";
             news.CreateDate = DateTime.Now;
-            await _context.Newes.AddAsync(news);
+            var addedNews = await _context.Newses.AddAsync(news);
             await _context.SaveChangesAsync();
-            return _mapper.Map<News, NewsDTO>(news);
+            return _mapper.Map<News, NewsDTO>(addedNews.Entity);
         }
 
-        public async Task<IEnumerable<NewsDTO>> GetAllNewses()
+        public async Task<NewsDTO> UpdateNews(int newsId, NewsDTO newsDTO)
         {
             try
             {
-                IEnumerable<NewsDTO> newsDTOs = _mapper.Map<IEnumerable<News>, IEnumerable<NewsDTO>>(await _context.Newes.ToListAsync());
-                return newsDTOs;
+                if (newsId == newsDTO.NewsId)
+                {
+                    News newsDetail = await _context.Newses.FindAsync(newsId);
+                    News news = _mapper.Map<NewsDTO, News>(newsDTO, newsDetail);
+                    news.EditedBy = "";
+                    _context.Newses.Update(news);
+                    await _context.SaveChangesAsync();
+                    return _mapper.Map<News, NewsDTO>(news);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 return null;
             }
@@ -53,9 +63,41 @@ namespace Blazor.Business.Repository
         {
             try
             {
-                return _mapper.Map<News, NewsDTO>(await _context.Newes.FindAsync(newsId));
+                NewsDTO news = _mapper.Map<News, NewsDTO>(await _context.Newses.SingleOrDefaultAsync(s => s.NewsId == newsId));
+                return news;
             }
-            catch (Exception ex)
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<NewsDTO>> GetAllNewses()
+        {
+            try
+            {
+                IEnumerable<NewsDTO> newsDTOs = _mapper.Map<IEnumerable<News>, IEnumerable<NewsDTO>>(await _context.Newses.ToListAsync());
+                return newsDTOs;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<NewsDTO>> GetAllNewsesByCount(int count)
+        {
+            try
+            {
+                var data = await _context
+                    .Newses
+                    .OrderByDescending(s => s.CreateDate)
+                    .Take(count)
+                    .ToListAsync();
+                IEnumerable<NewsDTO> newsDTOs = _mapper.Map<IEnumerable<News>, IEnumerable<NewsDTO>>(data);
+                return newsDTOs;
+            }
+            catch (Exception e)
             {
                 return null;
             }
@@ -63,53 +105,46 @@ namespace Blazor.Business.Repository
 
         public async Task<NewsDTO> IsNewsExistsByTitle(string title, int newsId)
         {
-            try
-            {
-                return _mapper.Map<News, NewsDTO>(await _context.Newes.SingleOrDefaultAsync(n => n.Title == title && n.NewsId != newsId));
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return _mapper.Map<News, NewsDTO>(await _context.Newses.FirstOrDefaultAsync(s => s.Title == title && s.NewsId != newsId));
         }
 
         public async Task<int> RemoveNews(int newsId)
         {
-            var news = await _context.Newes.FindAsync(newsId);
+            var news = await _context.Newses.FindAsync(newsId);
             if (news != null)
             {
-                _context.Newes.Remove(news);
+                _context.Newses.Remove(news);
                 await _context.SaveChangesAsync();
+
                 return news.NewsId;
             }
+
             return 0;
         }
 
-        public async Task<int> RemoveNews(NewsDTO newsDTO)
+        public async Task<int> RemoveNews(NewsDTO news)
         {
-            return await RemoveNews(newsDTO.NewsId);
+            return await RemoveNews(news.NewsId);
         }
 
-        public async Task<NewsDTO> UpdateNews(int newsId, NewsDTO newsDTO)
+        public async Task<FilterNewsesDTO> FilterNewses(FilterNewsesDTO filter)
         {
-            try
+            var query = _context.Newses.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filter.Title))
             {
-                News currenNews = await _context.Newes.FindAsync(newsId);
-
-                if (currenNews == null) return null;
-                if (currenNews.NewsId != newsDTO.NewsId) return null;
-
-                News upadateNews = _mapper.Map<NewsDTO, News>(newsDTO, currenNews);
-                upadateNews.EditedBy = "";
-
-                _context.Newes.Update(upadateNews);
-                await _context.SaveChangesAsync();
-                return _mapper.Map<News, NewsDTO>(upadateNews);
+                query = query.Where(s => EF.Functions.Like(s.Title, $"%{filter.Title}%"));
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+
+            var allEntitiesCount = await query.CountAsync();
+
+            var pager = Pager.Build(filter.Page, filter.Take, allEntitiesCount, filter.HowManyShowAfterBefore);
+
+            var newses = await query.Paging(pager).ToListAsync();
+
+            filter.Newses = _mapper.Map<List<News>, List<NewsDTO>>(newses);
+
+            return filter.SetPaging(pager);
         }
     }
 }
