@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <partial name="_HeaderRefrencesPartial" />
+</head>
+<body>
+    <partial name="_TopBarPartial" />
+
+    <div class="main-header">
+        <partial name="_MainHeaderPartial" />
+    </div>
+
+    <!--Main Section-->
+    <div class="single_post">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+        @* </div> *@
+    </div>
+
+    <div class="clear-fix"></div>
+    <partial name="_FooterPartial" />
+    <div class="bg"></div>
+    <partial name="_FooterRefrencesPartial" />
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

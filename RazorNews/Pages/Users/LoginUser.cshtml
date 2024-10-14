@@ -1,0 +1,46 @@
+﻿@page "/login"
+@model RazorNews.Pages.Users.LoginUserModel
+@{
+    ViewData["Title"] = "ورود به سایت";
+}
+
+<main>
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-md-8 center-block">
+                <div class="post_content">
+                    <form method="post">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="email-address"><i class="fa fa-envelope"></i></span>
+                            <input asp-for="LoginUser.Email" type="text" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+                        </div>
+                        <span asp-validation-for="LoginUser.Email"></span>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="password"><i class="fa fa-lock"></i></span>
+                            <input asp-for="LoginUser.Password" type="password" class="form-control" placeholder="رمز عبور " aria-describedby="password">
+                        </div>
+                        <span asp-validation-for="LoginUser.Password"> </span>
+                        <div class="remember-me">
+                            <label>
+                                <input asp-for="LoginUser.RememberMe" type="checkbox" name="">  مرا بخاطر بسپار
+                            </label>
+                        </div>
+                        <div class="link">
+                            @* <a href="#"> <i class="zmdi zmdi-lock"></i> رمز عبور خود را فراموش کرده ام !</a> *@
+                            <a href="/register"> <i class="fa fa-user-o"></i> عضویت در سایت </a>
+                        </div>
+                        <button class="btn btn-success"> ورود به سایت </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

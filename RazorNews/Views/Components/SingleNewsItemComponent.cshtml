@@ -1,0 +1,30 @@
+﻿@model Blazor.Model.DTOs.Newses.NewsDTO
+@using CommonLayer;
+
+<div class="post-box">
+    @* <a href="#"> *@
+    <figure>
+        <img src="/@StaticDetail.Default_Src_News_Image/@Model.ImageName" alt="">
+        <figcaption class="meta-fig">
+            <span>
+                <i class="fa fa-clock-o"></i> @Model.CreateDate.ToShamsi()
+            </span>&nbsp;
+            @*     <span><i class="fa fa-comment-o"></i> 12</span> *@
+        </figcaption>
+        <figcaption class="view">
+            @*   <span>بخش ویژه</span>
+            <span>انجمن</span> *@
+            <span><a href="#">اتاق خبر</a></span>
+        </figcaption>
+    </figure>
+    <div class="text-p">
+        <h5>@Model.Title</h5>
+        <p>
+            @Model.ShortDescription
+        </p>
+        <div class="text-rigt">
+            <a href="@($"/news-detail/{Model.NewsId}")">ادامه ...</a>
+        </div>
+    </div>
+    @* </a> *@
+</div>

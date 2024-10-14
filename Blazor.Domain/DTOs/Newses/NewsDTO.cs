@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Blazor.Data.Entities.NewsEntities;
+using CommonLayer;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Blazor.Model.DTOs.Newses
@@ -23,9 +25,25 @@ namespace Blazor.Model.DTOs.Newses
 
         [Display(Name = "نام تصویر")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
-        public string ImageName { get; set; }
+        public string ImageName { get; set; } = StaticDetail.Default_News_Image;
+
+        [Display(Name = "تصویر")]
+        public IFormFile? ImageItem { get; set; }
+
+        [Display(Name = "کلمات کلیدی")]
+        [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
+        [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
+        public string Tags { get; set; }
 
         [Display(Name = "تاریخ ثبت")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        public string? CreatedBy { get; set; }
+
+        [Display(Name = "لیست نظرات")]
+        public List<Comment> CommentsNews { get; set; } = new List<Comment>();
+        public int ViewCount { get; set; } = 0;
+
+
     }
 }

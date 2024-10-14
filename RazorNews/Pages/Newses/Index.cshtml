@@ -1,0 +1,95 @@
+﻿@page "/newsesList"
+
+@model RazorNews.Pages.Newses.IndexModel
+
+@{
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-page="CreateNews" class="btn btn-info form-control">
+                ثبت خبر جدید
+            </a>
+            <div class="post_content">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.NewsList[0].Title)</td>
+                            <td>@Html.DisplayNameFor(model => model.NewsList[0].CreateDate)</td>
+                            <td>@Html.DisplayNameFor(model => model.NewsList[0].ShortDescription)</td>
+                            <td>دستورات</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.NewsList.Any())
+                        {
+                            foreach (var news in Model.NewsList)
+                            {
+                                <tr>
+                                    <td>
+                                        @news.Title
+                                    </td>
+                                    <td>
+                                        @news.CreateDate
+                                    </td>
+                                    <td>
+                                        @news.ShortDescription
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info col-md-12" asp-page="./NewsDetail" asp-route-id="@news.NewsId">جزییات خبر</a>
+                                        <br />
+                                        <a class="btn btn-warning col-md-12" asp-page="./EditNews" asp-route-id="@news.NewsId"> ویرایش خبر</a>
+                                        <br />
+                                        <button class="btn btn-danger col-md-12 " onclick="showDeletePopup(@news.NewsId)">حذف خبر</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">هیچ خبری یافت نشد</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @* <div class="col-md-12">
+        <p>
+        IsConfirm : @IsConfirm
+        </p>
+        </div> *@
+    </div>
+</div>
+
+<!-- Popup Modal delete -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modalMessage">از حذف این گزینه مطمین هستید؟</p>
+        <form id="deleteForm" method="post" asp-page-handler="Delete">
+            <input type="hidden" id="itemId" name="id" />
+            <button type="submit" class="btn btn-danger">بله، حذف شود.</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">منصرف شدم.</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function showDeletePopup(id, title) {
+            document.getElementById('deleteModal').style.display = 'flex';
+            document.getElementById('modalMessage').textContent = 'آیا از حذف خبر با عنوان "' + title + '"مطمین هستید؟';
+            document.getElementById('itemId').value = id;
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+    </script>
+}

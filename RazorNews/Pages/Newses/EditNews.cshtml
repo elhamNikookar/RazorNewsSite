@@ -1,0 +1,93 @@
+﻿@page
+
+@model EditNewsModel
+
+@{
+}
+
+@using CommonLayer
+
+<div class="post_content">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="NewsDto.NewsId" />
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <span class="input-group-addon" id="tittle">
+                    <label asp-for="NewsDto.Title" class="control-label"></label>
+                </span>
+                <input asp-for="NewsDto.Title" type="text" class="form-control">
+            </div>
+            <span asp-validation-for="NewsDto.Title" class="text-danger"></span>
+            <br class="border-4" />
+            <div class="form-group">
+                <span class="input-group-addon" id="shortDescription">
+                    <label asp-for="NewsDto.ShortDescription" class="control-label"></label>
+                </span>
+                <input asp-for="NewsDto.ShortDescription" type="text" class="form-control">
+            </div>
+            <span asp-validation-for="NewsDto.ShortDescription" class="text-danger"></span>
+
+
+            <div class="form-group">
+                <span class="input-group-addon" id="keyWord">
+                    <label asp-for="NewsDto.Tags" class="control-label"></label>
+                </span>
+                <input asp-for="NewsDto.Tags" type="text" class="form-control">
+            </div>
+            <span asp-validation-for="NewsDto.Tags" class="text-danger"></span>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="Description">
+                    <label asp-for="NewsDto.Description" class="control-label"></label>
+                </span>
+                <textarea asp-for="NewsDto.Description" type="text" class="form-control"></textarea>
+            </div>
+            <span asp-validation-for="NewsDto.Description" class="text-danger"></span>
+
+            <div class="form-group">
+                <label asp-for="NewsDto.ImageItem" class="control-label"></label>
+                <div class="panel-body">
+                    <img id="imgNews" class="thumbnail img-thumbnail" src="/@StaticDetail.Default_Src_News_Image/@StaticDetail.Default_News_Image" />
+                    <div class="form-group">
+                        <label>انتخاب تصویر</label>
+                        <input type="file" asp-for="NewsDto.ImageItem">
+                    </div>
+                </div>
+            </div>
+            <span asp-validation-for="NewsDto.ImageName" class="text-danger"></span>
+
+            <div class="form-group">
+                <input type="submit" value="ویرایش خبر" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgNews').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#NewsDto_ImageItem").change(function () {
+            readURL(this);
+        });
+    </script>
+}

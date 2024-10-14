@@ -1,0 +1,102 @@
+﻿@page "/news-detail/{Id:int}"
+
+@model NewsDetailModel
+
+@{
+}
+
+@using CommonLayer;
+@using Blazor.Business.Repository.IRepository
+@using Blazor.Model.DTOs.Newses
+@using Microsoft.AspNetCore.Components
+
+@inject INewsRepository NewsRepository
+
+@if (Model.NewsDto != null)
+{
+    <div class="single_post">
+        <div class="container-fluid">
+            <div class="col-md-3">
+                <!--top sideBar right Images-->
+                @await Component.InvokeAsync("ImageNewsesSideBarComponent", new { newsesList = Model.NewsesListSidebar })
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="post_img">
+                            <img src="/@StaticDetail.Default_Src_News_Image/@Model.NewsDto.ImageName" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                @*                 <div class="posts_meta text-center">
+            <span><i class="fa fa-comment-o"></i> 25 نظر</span>
+            <span><i class="fa fa-archive"></i> اقتصادی</span>
+            <span><i class="fa fa-calendar"></i> @NewsDto.CreateDate.ToString("yyyy-M-d dddd")</span>
+            </div> *@
+                <div class="post_content">
+                    <h2>@Model.NewsDto.Title</h2>
+                    <p>@Model.NewsDto.ShortDescription</p>
+                    <img src="/@StaticDetail.Default_Src_News_Image/@Model.NewsDto.ImageName" alt="">
+                    <br />
+                    <div>
+                        @((MarkupString)Model.NewsDto.Description)
+                    </div>
+                    <div class="news-footer">
+                        <p>
+                            برچسب :@Model.NewsDto.Tags.ConvertToHashtags()
+                        </p>
+                    </div>
+                    <div class="news-footer">
+                        <span class="news-date">
+                            تاریخ: @Model.NewsDto.CreateDate.ToShamsi()
+                        </span>
+                        <span class="news-views">بازدیدها: @Model.NewsDto.ViewCount</span>
+                    </div>
+
+                </div>
+                <div class="post_content">
+                    <h5>دیدگاه شما</h5>
+                    <form method="post">
+                        <input asp-for="NewsID" hidden />
+                        <div class="form-row">
+                            <div class="form-group">
+                                <span class="input-group-addon" id="Creator">
+                                    <label asp-for="NewComment.CreatedBy" class="control-label"></label>
+                                </span>
+                                <input asp-for="NewComment.CreatedBy" type="text" class="form-control">
+                            </div>
+                            <span asp-validation-for="NewComment.CreatedBy" class="text-danger"></span>
+
+                            <div class="form-group">
+                                <span class="input-group-addon" id="MailCreator">
+                                    <label asp-for="NewComment.MailCreator" class="control-label"></label>
+                                </span>
+                                <input asp-for="NewComment.MailCreator" type="text" class="form-control">
+                            </div>
+                            <span asp-validation-for="NewComment.MailCreator" class="text-danger"></span>
+
+                            <div class="form-group">
+                                <span class="input-group-addon" id="Comment">
+                                    <label asp-for="NewComment.DescriptionComment" class="control-label"></label>
+                                </span>
+                                <textarea asp-for="NewComment.DescriptionComment" type="text" rows="5" class="form-control">نظر شما...</textarea>
+                            </div>
+                            <span asp-validation-for="NewComment.DescriptionComment" class="text-danger"></span>
+                            <div class="form-group text-left">
+                                <button class="btn btn-primary" type="submit">ثبت نظر</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-3 ">
+                @await Html.PartialAsync("PersianCalendarPartial", Model.PersianCalendar)
+            </div>
+        </div>
+    </div>
+}
+
+

@@ -1,0 +1,37 @@
+﻿@model Blazor.Model.DTOs.Common.PersianCalendarViewModel
+
+
+<div class="calendar">
+    <div class="calendar-header">
+        <h3>@Model.MonthName @Model.CurrentYear</h3>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ش</th>
+                <th>ی</th>
+                <th>د</th>
+                <th>س</th>
+                <th>چ</th>
+                <th>پ</th>
+                <th>ج</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var week in Model.GetCalendar())
+            {
+                <tr>
+                    @foreach (var day in week.Select((value, index) => new { value, index }))
+                    {
+                        <td class="@Model.GetDayClass(day.value, day.index)">
+                            @if (day.value != 0)
+                            {
+                                @day.value
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

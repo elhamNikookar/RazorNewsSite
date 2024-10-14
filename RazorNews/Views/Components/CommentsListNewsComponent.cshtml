@@ -1,0 +1,68 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model NewsViewModel
+
+@using Blazor.Data.Entities.NewsEntities
+@using Blazor.Model.DTOs.Newses
+@using CommonLayer;
+
+
+<div class="comments_form">
+    @if (Model.CommentList != null && Model.CommentList.Any())
+    {
+        @foreach (var comment in Model.CommentList)
+        {
+            <div class="border-2 mb-2 p-2">
+                <div class="flex items-center">
+                    <p class="text-caption text-neutral-400 inline">@comment.CreatedBy</p>
+                    <p class="text-caption text-neutral-400 inline ml-2">
+                        @comment.CreateDate.ToShamsi()
+                    </p>
+                </div>
+                <div class="flex items-center gap-5 mt-2">
+                    <p class="text-body-2">@comment.DescriptionComment</p>
+                </div>
+                <div class="flex items-center gap-4 mt-2">
+                    <form method="post" asp-action="LikeComment" asp-route-commentId="@comment.CommentId" asp-route-newsId="@Model.NewsDto.NewsId">
+                        <button type="submit" class="btn btn-link">
+                            <i class="fa @(Model.LikedComments.Contains(comment.CommentId) ? "fa-heart" : "fa-heart-o")" style="color: @(Model.LikedComments.Contains(comment.CommentId) ? "red" : "black")"></i>
+                            <span>@comment.Like</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+
+    <hr class="fa-text-height" />
+@*     <h5>دیدگاه شما</h5>
+    <form method="post" asp-action="AddComment" asp-route-newsId="@Model.NewsDto.NewsId">
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>نام : </label>
+                    <input type="text" class="form-control" name="NewComment.CreatedBy" value="@Model.NewComment.CreatedBy" placeholder="نام شما" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>ایمیل : </label>
+                    <input type="email" class="form-control" name="NewComment.MailCreator" value="@Model.NewComment.MailCreator" placeholder="ایمیل شما" />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <textarea class="form-control" name="NewComment.DescriptionComment" placeholder="نظر شما ....">@Model.NewComment.DescriptionComment</textarea>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group text-left">
+                    <button class="btn btn-primary" type="submit">ثبت نظر</button>
+                </div>
+            </div>
+        </div>
+    </form> *@
+</div>

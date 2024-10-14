@@ -1,0 +1,58 @@
+﻿@page "/register"
+@model RazorNews.Pages.Users.RegisterModel
+@{
+}
+
+<div class="post_content ">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <form method="post">
+            <DataAnnotationsValidator />
+            <div class="input-group">
+                <span class="input-group-addon" id="username">
+                    <i class="fa fa-user">  </i>
+                    <label asp-for="UserModel.UserName" class="control-label"></label>
+                </span>
+                <input asp-for="UserModel.UserName" type="text" class="form-control" placeholder="نام کاربری" aria-describedby="username">
+            </div>
+            <span asp-validation-for="UserModel.UserName" class="text-danger"></span>
+            <hr />
+            <div class="input-group">
+                <span class="input-group-addon" id="email-address">
+                    <i class="fa fa-envelope">   </i>
+                    <label asp-for="UserModel.Email" class="control-label"></label>
+                </span>
+                <input asp-for="UserModel.Email" type="text" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+            </div>
+            <span asp-validation-for="UserModel.Email" class="text-danger"></span>
+            <hr />
+            <div class="input-group">
+                <span class="input-group-addon" id="password">
+                    <i class="fa fa-lock">  </i>
+                    <label asp-for="UserModel.Password" class="control-label"></label>
+                </span>
+                <input asp-for="UserModel.Password" type="password" class="form-control" placeholder="رمز عبور " aria-describedby="password">
+            </div>
+            <span asp-validation-for="UserModel.Password" class="text-danger"> </span>
+            <hr />
+            <div class="input-group">
+                <span class="input-group-addon" id="repassword">
+                    <i class="fa fa-lock">   </i>
+                    <label asp-for="UserModel.RePassword" class="control-label"></label>
+                </span>
+                <input asp-for="UserModel.RePassword" type="password" class="form-control" placeholder="تکرار رمز عبور " aria-describedby="repassword">
+            </div>
+            <span asp-validation-for="UserModel.RePassword" class="text-danger"> </span>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="link">
+                <a href="/Login"> <i class="zmdi zmdi-account"></i> ورود به سایت </a>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">ثبت نام</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

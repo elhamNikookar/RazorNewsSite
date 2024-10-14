@@ -1,0 +1,27 @@
+﻿@model List<Blazor.Model.DTOs.Newses.NewsDTO>
+
+
+<div class="latest-posts">
+    <div class="container-fluid">
+        <div class="blog-title-span">
+            <span class="title">آخرین مطالب</span>
+        </div>
+        <div class="row justify-content-center">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var news in Model)
+                {
+                    <div class="col-lg-3 col-md-5 col-sm-8 mb-3">
+                        <!-- فراخوانی View Component و ارسال پارامتر -->
+                        @await Component.InvokeAsync("SingleNewsItemComponent", new { newsItem = news })
+                    </div>
+                }
+            }
+            else
+            {
+                <p>اخباری برای نمایش وجود ندارد.</p>
+            }
+        </div>
+
+    </div>
+</div>

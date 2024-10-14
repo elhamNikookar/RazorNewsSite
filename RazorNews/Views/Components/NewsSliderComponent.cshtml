@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Blazor.Model.DTOs.Newses.NewsDTO>
+@using CommonLayer;
+
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="slider">
+        <ul class="slides">
+            @foreach (var item in Model.Select((n, index) => new { News = n, Index = index }))
+            {
+                <li style="display:@(item.Index == ViewBag.CurrentSlide ? "block" : "none"); width: 508px; margin-left: 8px;">
+                    <div class="item">
+                        <figure>
+                            <img class="news-image" src="@StaticDetail.Default_Src_News_Image/@item.News.ImageName" alt="@item.News.Title">
+                            <figcaption class="gradient-fig"></figcaption>
+                            <figcaption class="desc-fig">
+                                <h3>@item.News.Title</h3>
+                                <span><i class="fa fa-clock-o"></i> @item.News.CreateDate.GetTimeAgo()</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="controls">
+        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+}
+else
+{
+    <p>تصویری برای نمایش وجود ندارد.</p>
+}
+
+
+<script>
+    var currentSlide = 0;
+
+    function changeSlide(direction) {
+        currentSlide = (currentSlide + direction + @Model.Count()) % @Model.Count();
+        document.querySelectorAll(".slides li").forEach((slide, index) => {
+            slide.style.display = index === currentSlide ? "block" : "none";
+        });
+    }
+
+    setInterval(function () {
+        changeSlide(1);
+    }, 5000);
+</script>
+
+
+
+
+@* <div class="col-md-6">
+    <div class="main-slider-box">
+        <div class="owl-carousel owl-theme main-slider owl-rtl owl-loaded owl-drag">
+            <div class="owl-stage-outer">
+                <div class="owl-stage">
+                    @foreach (var itemNews in Model)
+                    {
+                        <div class="owl-item" style="width: 536px; margin-left: 8px;">
+                            <div class="item">
+                                <figure>
+                                    <img src="@StaticDetail.Default_Src_News_Image/@itemNews.ImageName" alt="@itemNews.Tittle">
+                                    <figcaption class="gradient-fig"></figcaption>
+                                    <figcaption class="desc-fig">
+                                        <span><i class="fa fa-heart"></i> @itemNews.ViewCount</span>
+                                        <h3>@itemNews.Tittle</h3>
+                                        <span><i class="fa fa-clock-o"></i> @itemNews.CreateDate.GetTimeAgo()</span>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="owl-nav">
+                <button type="button" role="presentation" class="owl-prev"><span aria-label="Previous">‹</span></button>
+                <button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button>
+            </div>
+            <div class="owl-dots">
+                <button role="button" class="owl-dot"><span></span></button>
+                <button role="button" class="owl-dot active"><span></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+            items: 1, // تعداد آیتم‌های نمایش داده شده در هر اسلاید
+            loop: true, // فعال‌سازی حلقه
+            margin: 10, // فاصله بین آیتم‌ها
+            nav: true, // فعال‌سازی دکمه‌های ناوبری
+            rtl: true // فعال‌سازی حالت راست به چپ برای زبان‌های RTL
+        });
+    });
+</script>
+ *@
+
+
+
+
+

@@ -1,0 +1,51 @@
+﻿@using CommonLayer
+<div class="container-fluid">
+    <div class="col-md-10">
+        <div class="main-menu">
+            <ul>
+                <li><a href="/">اتاق خبر</a></li>
+                @* <li><a href="/newsesList">مدیریت اخبار</a></li>
+                <li><a href="/add-news">ثبت خبر</a></li> *@
+
+                @*                         <li><a href="#">اقتصادی</a></li>
+                <li><a href="#">انجمن</a></li>
+                <li><a href="#">گروه رسانه ای</a></li> *@
+
+                <li>
+                    <div class="clientarea">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="loggein">
+                                <a href="/newsesList">مدیریت اخبار</a>
+                                <a href="/add-news">ثبت خبر</a>
+                                @*                                 @if (User.IsInRole(StaticDetail.AdminUser))
+                            {
+                            <a href="/UsersManager">مدیریت کاربران</a>
+                            } *@
+                                <i class="fa fa-user"></i> @User.Identity.Name ، خوش آمدید
+                                <a href="/Logout"> خروج </a><i class="fa fa-sign-out"></i>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="signin">
+                                <a href="/Login"> ورود </a> /
+                                <a href="/Register"> عضویت </a>
+                                <i class="fa fa-sign-in"></i>
+                            </div>
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="social-box">
+            <ul>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

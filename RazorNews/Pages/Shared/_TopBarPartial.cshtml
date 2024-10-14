@@ -1,0 +1,38 @@
+﻿<div class="top-bar">
+    <div class="container-fluid">
+        <div class="col-md-6 navbar-left">
+            <div class="top-cat-box">
+                <div class="col-md-12">
+                    <div class="menu">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li><a asp-page="ContactUs">تماس با ما</a></li>
+                            <li><a asp-page="aboutUs">درباره ما</a></li>
+                            @* <li><a href="#">مقالات</a></li>  *@
+                        </ul>
+                    </div>
+                </div>
+                <!-- <div class="col-md-3">
+                   <div class="show-cat">
+                       <span>
+                           دسته ها
+                           <i class="fa fa-bars"></i>
+                       </span>
+                   </div>
+                   </div> -->
+            </div>
+        </div>
+
+        <br />
+        <div class="col-md-6">
+            <div class="search-form">
+                <form asp-page="Newses/SearchNewses" method="get" class="d-flex align-items-center">
+                    <input type="text" class="col-md-8 me-2 p-2" name="searchkey" id="autoFilter" placeholder="جستجو ..." style="height: 38px;" required />
+                    <button class="btn btn-success " type="submit" style="height: 38px;">
+                        جستجو <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@model List<Blazor.Model.DTOs.Newses.NewsDTO>
+@using CommonLayer;
+
+<div class="top-sidebar-r">
+    <span class="title">عکس</span>
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var news in Model.Take(4))
+        {
+            <a href="@($"/news-detail/{news.NewsId}")" forceLoad="true">
+                <div class="bx">
+                    <div class="col-md-6">
+                        <div class="img-box">
+                            <figure>
+                                <img src="/@StaticDetail.Default_Src_News_Image/@news.ImageName" alt="">
+                                @* <figcaption><span>1</span></figcaption> *@
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="meta">
+                            <h5>@news.Title</h5>
+                            <span><i class="fa fa-clock-o"></i> @news.CreateDate.ToShamsi()</span>
+                            @* <div class="text-left">
+                                <sub><i class="fa fa-comment"></i>@news.CommentsNews.Count</sub>
+                            </div> *@
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    }
+    else
+    {
+        <p>تصویری برای نمایش وجود ندارد.</p>
+    }
+</div>

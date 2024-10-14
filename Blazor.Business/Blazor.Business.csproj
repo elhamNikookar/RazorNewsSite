@@ -8,11 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="NHibernate" Version="5.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Blazor.Data\Blazor.Data.csproj" />
     <ProjectReference Include="..\Blazor.Domain\Blazor.Model.csproj" />
+    <ProjectReference Include="..\CommonLayer\CommonLayer.csproj" />
   </ItemGroup>
 
 </Project>
