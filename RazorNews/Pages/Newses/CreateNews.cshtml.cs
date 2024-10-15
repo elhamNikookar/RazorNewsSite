@@ -3,10 +3,11 @@ using Blazor.Model.DTOs.Newses;
 using CommonLayer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RazorNews.Pages.Newses
 {
-    //[Microsoft.AspNetCore.Authorization.Authorize]
+    [Authorize(Roles = StaticDetail.AdminUser)]
 
     public class CreateNewsModel : PageModel
     {

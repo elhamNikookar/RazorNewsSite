@@ -3,16 +3,16 @@
 
 
 <div class="top-sidebar-l">
-    <span class="title">یادداشت</span>
+    <span class="title">یادداشت ها</span>
     @if (Model != null && Model.Any())
     {
     @foreach (Comment item in Model)
     {
         <a href="#">
             <div class="bx">
-                <div class="col-md-3 nopadding">
+                @* <div class="col-md-3 nopadding">
                     <span><i class="fa fa-heart"></i> @item.Like</span>
-                </div>
+                </div> *@
                 <div class="col-md-8 nopadding">
                     <h3 class="limited-text">
                         @item.DescriptionComment

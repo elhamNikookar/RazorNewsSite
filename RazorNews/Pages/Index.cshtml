@@ -28,12 +28,11 @@
                 </div>
             </div>
 
-            <div class="col-md-3 pull-left">
+            <div class="col-md-3 hide-on-mobile pull-left">
                 <!--top sideBar right Comments-->
                 @await Component.InvokeAsync("CommentsSideBarComponent")
             </div>
         </div>
-
         <div class="clear-fix"></div>
         <div class="main-content">
             <div class="container-fluid">
@@ -295,15 +294,10 @@
                 </div>
                 *@
             </div>
-
-            <div class="clear-fix"></div>
+                        <div class="clear-fix"></div>
             @* latest Posts *@
             @Html.Partial("LatestNewsesPartial", Model.NewsesList)
-
         </div>
         <div class="clear-fix"></div>
-
     </div>
-
-
 </body>

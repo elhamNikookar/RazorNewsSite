@@ -272,6 +272,7 @@ namespace Blazor.Business.Repository
                     UserId = u.UserId,
                     AvatarName = u.UserAvatar,
                     UserName = u.UserName,
+                    IsActive = u.IsActive,
                     RoleId = u.RoleId,
                     Email = u.Email
 
@@ -282,6 +283,7 @@ namespace Blazor.Business.Repository
         {
             User user = GetUserById(editUser.UserId);
             user.Email = editUser.Email;
+            user.IsActive = editUser.IsActive;
             if (!string.IsNullOrEmpty(editUser.Password))
                 user.Password = editUser.Password;//.EncodePasswordMd5();
 
@@ -321,7 +323,7 @@ namespace Blazor.Business.Repository
             newUser.UserName = profile.UserName;
             newUser.Email = profile.Email;
             newUser.RegisterDate = DateTime.Now;
-            newUser.IsActive = true;
+            newUser.IsActive = false;
             newUser.RoleId = 3;
             newUser.UserAvatar = StaticDetail.DefaultUserAvatar;
 

@@ -16,7 +16,7 @@
 {
     <div class="single_post">
         <div class="container-fluid">
-            <div class="col-md-3">
+            <div class="col-12 col-md-6 col-lg-3">
                 <!--top sideBar right Images-->
                 @await Component.InvokeAsync("ImageNewsesSideBarComponent", new { newsesList = Model.NewsesListSidebar })
             </div>
@@ -54,14 +54,43 @@
                         </span>
                         <span class="news-views">بازدیدها: @Model.NewsDto.ViewCount</span>
                     </div>
-
                 </div>
-                <div class="post_content">
+                <div class="comments_form">
+                    @if (Model.NewsDto.CommentsNews != null && Model.NewsDto.CommentsNews.Any())
+                    {
+                        <h4>دیدگاه کاربران </h4>
+                        <hr />
+                        @foreach (var comment in Model.NewsDto.CommentsNews)
+                        {
+                            <div class="border-2 mb-2 p-2">
+                                <div class="flex items-center">
+                                    <div class="col-md-6">
+                                        <p class="text-caption text-neutral-400 inline">@comment.CreatedBy</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="text-caption text-neutral-400 inline ml-2">
+                                            @comment.CreateDate.ToShamsi()
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5 mt-2">
+                                    <p class="text-body-2">@comment.DescriptionComment</p>
+                                </div>
+                                @*                             <div class="flex items-center gap-4 mt-2">
+                    <button class="btn btn-link" @onclick="() => HandleLike(comment)">
+                    <i class="fa @(likedComments.Contains(comment.CommentId) ? "fa-heart" : "fa-heart-o")" style="color: @(likedComments.Contains(comment.CommentId) ? "red" : "black")"></i>
+                    <span>@comment.Like</span>
+                    </button>
+                    </div> *@
+                            </div>
+                        }
+                    }
+                    <hr class="border-3" />
                     <h5>دیدگاه شما</h5>
                     <form method="post">
                         <input asp-for="NewsID" hidden />
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group  col-md-6">
                                 <span class="input-group-addon" id="Creator">
                                     <label asp-for="NewComment.CreatedBy" class="control-label"></label>
                                 </span>
@@ -69,7 +98,7 @@
                             </div>
                             <span asp-validation-for="NewComment.CreatedBy" class="text-danger"></span>
 
-                            <div class="form-group">
+                            <div class="form-group col-md-6">
                                 <span class="input-group-addon" id="MailCreator">
                                     <label asp-for="NewComment.MailCreator" class="control-label"></label>
                                 </span>
@@ -81,7 +110,7 @@
                                 <span class="input-group-addon" id="Comment">
                                     <label asp-for="NewComment.DescriptionComment" class="control-label"></label>
                                 </span>
-                                <textarea asp-for="NewComment.DescriptionComment" type="text" rows="5" class="form-control">نظر شما...</textarea>
+                                <textarea asp-for="NewComment.DescriptionComment" type="text" rows="3" class="form-control">نظر شما...</textarea>
                             </div>
                             <span asp-validation-for="NewComment.DescriptionComment" class="text-danger"></span>
                             <div class="form-group text-left">
@@ -91,8 +120,7 @@
                     </form>
                 </div>
             </div>
-
-            <div class="col-md-3 ">
+            <div class="col-md-3 hide-on-mobile">
                 @await Html.PartialAsync("PersianCalendarPartial", Model.PersianCalendar)
             </div>
         </div>

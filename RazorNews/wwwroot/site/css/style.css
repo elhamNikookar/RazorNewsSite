@@ -1614,3 +1614,10 @@ li:focus {
     width: 100%; /* یا اندازه‌ای مناسب */
     height: auto;
 }
+
+/* styles.css */
+@media (max-width: 767.98px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}

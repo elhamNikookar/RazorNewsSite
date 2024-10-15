@@ -52,6 +52,8 @@ namespace Blazor.Model.DTOs.Users
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیش از{1} کاراکتر  اشته باشد.")]
         public string? Password { get; set; }
 
+        public bool IsActive { get; set; }
+
         public int RoleId { get; set; }
 
         public string? AvatarName { get; set; }

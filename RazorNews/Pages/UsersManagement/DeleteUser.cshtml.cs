@@ -1,13 +1,15 @@
 ﻿
 using Blazor.Business.Repository.IRepository;
 using Blazor.Model.DTOs.Users;
+using CommonLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorNews.Pages.UsersManagement
 {
 
-    //[PermissionChecker(5)]
+    [Authorize(Roles = StaticDetail.AdminUser)]
     public class DeleteUserModel : PageModel
     {
 

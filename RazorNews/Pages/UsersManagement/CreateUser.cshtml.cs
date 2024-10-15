@@ -3,12 +3,14 @@ using Blazor.Business.Repository;
 using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Entities.UserEntities;
 using Blazor.Model.DTOs.Users;
+using CommonLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorNews.Pages.UsersManagement
 {
-    //[PermissionChecker(3)]
+    [Authorize(Roles = StaticDetail.AdminUser)]
     public class CreateUserModel : PageModel
     {
         #region Constructor
