@@ -24,8 +24,16 @@ namespace Blazor.Model.DTOs.Newses
         public string DescriptionComment { get; set; }
 
         public DateTime? CreateDate { get; set; }
+
+        [Display(Name = "پاسخ به نظر")]
+        public string? AnswerComment { get; set; }
+        public bool IsActive { get; set; } = false;
+        public int? NewsId { get; set; }
+
         public int Like { get; set; } = 0;
         public int Dislike { get; set; } = 0;
-        public bool IsActive { get; set; } = false;
+
+        
+
     }
 }

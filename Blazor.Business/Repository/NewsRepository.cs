@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Blazor.Business.Repository.IRepository;
 using Blazor.Data.Context;
 using Blazor.Data.Entities.NewsEntities;
@@ -229,14 +228,14 @@ namespace Blazor.Business.Repository
             return true;
         }
 
-        public async Task<IEnumerable<Comment>> GetAllCommentsByDate(int count = 0)
+        public async Task<IEnumerable<CommentDTO>> GetAllCommentsByDate(int count = 0)
         {
             try
             {
                 if (count > 0)
-                    return await _context.Comments.OrderByDescending(s => s.CreateDate).Take(count).ToListAsync();
+                    return _mapper.Map<IEnumerable<Comment>, IEnumerable<CommentDTO>>(await _context.Comments.OrderByDescending(s => s.CreateDate).Take(count).ToListAsync());
                 else
-                    return await _context.Comments.OrderByDescending(s => s.CreateDate).ToListAsync();
+                    return _mapper.Map<IEnumerable<Comment>, IEnumerable<CommentDTO>>(await _context.Comments.OrderByDescending(s => s.CreateDate).ToListAsync());
 
             }
             catch (Exception e)
@@ -319,5 +318,39 @@ namespace Blazor.Business.Repository
             return true;
         }
 
+        public async Task<bool> UpdateComment(CommentDTO commentDto)
+        {
+            if (commentDto == null) return false;
+            Comment CurrenComment = await _context.Comments.FindAsync(commentDto.CommentId);
+            if (CurrenComment == null) return false;
+
+            CurrenComment.AnswerComment = commentDto.AnswerComment;
+            CurrenComment.IsActive = commentDto.IsActive;
+            CurrenComment.DescriptionComment = commentDto.DescriptionComment;
+            CurrenComment.CreatedBy = commentDto.CreatedBy;
+            _context.Comments.Update(CurrenComment);
+            _context.SaveChanges();
+            return true;
+
+            //try
+            //{
+            //    Comment commentDetail = await _context.Comments.FindAsync(commentDto.CommentId);
+            //    if (commentDetail != null)
+            //    {
+            //        Comment comment = _mapper.Map<CommentDTO, Comment>(commentDto, commentDetail);
+            //        _context.Comments.Update(comment);
+            //        await _context.SaveChangesAsync();
+            //        return _mapper.Map<Comment, CommentDTO>(comment);
+            //    }
+            //    else
+            //    {
+            //        return null;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    return null;
+            //}
+        }
     }
 }

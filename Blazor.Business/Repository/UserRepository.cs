@@ -51,7 +51,8 @@ namespace Blazor.Business.Repository
             string hashPassword = login.Password;//.EncodePasswordMd5();
             string email = login.Email.FixEmail();
 
-            return _context.Users.SingleOrDefault(u => u.Email == email && u.Password == hashPassword);
+            return _context.Users.Include(u => u.Role)
+                .SingleOrDefault(u => u.Email == email && u.Password == hashPassword);
         }
 
         public User GetUserByEmail(string email)

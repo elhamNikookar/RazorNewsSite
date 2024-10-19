@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorNews.Pages.UsersManagement
 {
-    [Authorize(Roles = StaticDetail.AdminUser)]
+    [Authorize]
     public class CreateUserModel : PageModel
     {
         #region Constructor

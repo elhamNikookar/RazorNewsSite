@@ -25,8 +25,8 @@ namespace Blazor.Data.Context
             modelBuilder.Entity<News>()
                 .HasQueryFilter(x => !x.IsDeleted);
 
-            modelBuilder.Entity<Comment>()
-                .HasQueryFilter(x => !x.IsActive);
+            //modelBuilder.Entity<Comment>()
+            //    .HasQueryFilter(x => !x.IsActive);
 
             modelBuilder.Entity<User>()
                 .HasQueryFilter(x => !x.IsDelete);

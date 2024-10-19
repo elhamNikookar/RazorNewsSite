@@ -11,6 +11,9 @@ namespace Blazor.Business.Mapper
         {
             CreateMap<NewsDTO, News>();
             CreateMap<News, NewsDTO>();
+
+            CreateMap<Comment, CommentDTO>();
+            CreateMap<CommentDTO, Comment>();
         }
     }
 }

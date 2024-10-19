@@ -7,15 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorNews.Pages.Newses
 {
-    [Authorize(Roles = StaticDetail.AdminUser)]
+    [Authorize]
     public class IndexModel : PageModel
     {
         #region Constructor
-
         private readonly INewsRepository _newsRepository;
-
         public List<NewsDTO> NewsList { get; set; }
-
         public IndexModel(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
@@ -35,3 +32,7 @@ namespace RazorNews.Pages.Newses
         }
     }
 }
+
+
+
+//[Authorize(Roles = StaticDetail.AdminUser)]

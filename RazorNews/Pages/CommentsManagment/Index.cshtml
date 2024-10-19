@@ -1,0 +1,41 @@
+﻿@page
+@model RazorNews.Pages.CommentsManagment.IndexModel
+@{
+    ViewData["Title"] = "Edit Comments";
+}
+
+<h2>Edit Comments</h2>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Comments[0].CreatedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.Comments[0].MailCreator)</th>
+            <th>@Html.DisplayNameFor(model => model.Comments[0].DescriptionComment)</th>
+            <th>@Html.DisplayNameFor(model => model.Comments[0].AnswerComment)</th>
+            <th>@Html.DisplayNameFor(model => model.Comments[0].IsActive)</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model.Comments)
+        {
+            <tr>
+                <form method="post" asp-page-handler="Update">
+                    <td><input asp-for="@comment.CreatedBy" class="form-control" /></td>
+                    <td><input asp-for="@comment.MailCreator" class="form-control" /></td>
+                    <td><input asp-for="@comment.DescriptionComment" class="form-control" /></td>
+                    <td><input asp-for="@comment.AnswerComment" class="form-control" /></td>
+                    <td>
+                        <input type="checkbox" asp-for="@comment.IsActive" class="form-check-input" />
+                        <label class="status-label @(comment.IsActive ? "active" : "inactive")"> @(comment.IsActive ? "فعال" : "غیرفعال")</label>
+                    </td>
+                    <td>
+                        <input type="hidden" asp-for="@comment.CommentId" />
+                        <button type="submit" class="btn btn-primary">ذخیره</button>
+                    </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>

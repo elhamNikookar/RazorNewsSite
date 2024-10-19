@@ -29,6 +29,9 @@ namespace Blazor.Data.Entities.NewsEntities
         public int Dislike { get; set; } = 0;
         public bool IsActive { get; set; } = false;
 
+        [Display(Name = "پاسخ به نظر")]
+        public string? AnswerComment { get; set; }
+
         #region Relations
         public int NewsId { get; set; }
         [ForeignKey("NewsId")]

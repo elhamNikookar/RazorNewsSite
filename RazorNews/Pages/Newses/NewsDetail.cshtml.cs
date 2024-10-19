@@ -4,6 +4,7 @@ using Blazor.Model.DTOs.Common;
 using Blazor.Model.DTOs.Newses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Web.Mvc;
 
 namespace RazorNews.Pages.Newses
 {
@@ -29,6 +30,7 @@ namespace RazorNews.Pages.Newses
         {
             NewsesListSidebar = await _newsRepository.GetAllNewsesByCount(4);
             NewsDto = await _newsRepository.GetNewsByIdWhithComment(id);
+            ViewData["KeyWords"] = NewsDto.Tags.Replace(" ","");
             if (NewsDto != null)
             {
                 NewsID = NewsDto.NewsId;

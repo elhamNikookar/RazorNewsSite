@@ -3,6 +3,7 @@ using Blazor.Business.Repository;
 using Blazor.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using CommonLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddMvc();
 builder.Services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim("RoleTitle", StaticDetail.AdminUser));
+});
 
 #region Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

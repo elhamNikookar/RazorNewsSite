@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RazorNews.Pages.UsersManagement
 {
-    [Authorize(Roles =StaticDetail.AdminUser)]
+    [Authorize(Policy = "AdminOnly")]
 
     public class IndexModel : PageModel
     {

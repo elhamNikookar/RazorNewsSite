@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RazorNews.Pages.Newses
 {
-    [Authorize(Roles = StaticDetail.AdminUser)]
+    [Authorize]
 
     public class CreateNewsModel : PageModel
     {
